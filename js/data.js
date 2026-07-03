@@ -7,7 +7,7 @@ const SITE = {
   pages: [
     {
       id: "inicio",
-      title: "Inicio",
+      title: "Optimizador y destrabar windows",
       type: "home",
       // contenido: array de bloques {type: 'text'|'image'|'hero', content: ...}
       content: [
@@ -30,21 +30,12 @@ const SITE = {
   programs: [
     {
       id: "prog-1",
-      title: "Programa A",
+      title: "Optimizador y destrabar windows",
       slug: "programa-a",
       bgColor: "#fff7ee",
-      text: "Descripción del Programa A. Aquí colocas lo que necesites.",
+      text: "Optimizador windows",
       image: "assets/images/prog1.jpg",
-      download: "https://example.com/programa-a.zip"
+      download: "https://github.com/Resecitud1997/Optimizador-y-destrabar-windows/tree/main/software/releases/latest/download/Optimizador%20y%20destrabar%20Windows.exe.zip"
     },
-    {
-      id: "prog-2",
-      title: "Programa B",
-      slug: "programa-b",
-      bgColor: "#eef9ff",
-      text: "Descripción del Programa B. Cambia color, texto, imagen y enlace aquí.",
-      image: "assets/images/prog2.jpg",
-      download: "https://example.com/programa-b.zip"
-    }
   ]
 };
