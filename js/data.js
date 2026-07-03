@@ -3,7 +3,7 @@
 
 const SITE = {
   title: "Partido Al Medio",
-  tagline: "Software para optimizar windows con función extra de optimizar Gpu Y Cpu",
+  tagline: "El mejor diseño de cobre de todos con diseño muy bueno en método glatzight",
   pages: [
     {
       id: "inicio",
@@ -11,8 +11,8 @@ const SITE = {
       type: "home",
       // contenido: array de bloques {type: 'text'|'image'|'hero', content: ...}
       content: [
-        { type: "hero", title: "Bienvenido a Partido Al Medio", text: "Software para optimizar windows con función extra de optimizar Gpu Y Cpu" },
-        { type: "text", text: "Software para optimizar windows con función extra de optimizar Gpu Y Cpu" },
+        { type: "hero", title: "Bienvenido a Partido Al Medio", text: "Diseño pensado con cariño y estética cobre. Aquí puedes colocar varias fotos y texto." },
+        { type: "text", text: "Este sitio está creado para demostrar un sistema de páginas y subpáginas editables desde el código. Personaliza las imágenes en assets/images/." },
         { type: "gallery", images: ["assets/images/home1.jpg", "assets/images/home2.jpg", "assets/images/home3.jpg"] }
       ]
     },
@@ -30,14 +30,21 @@ const SITE = {
   programs: [
     {
       id: "prog-1",
-      title: "Optimizador Windows y Gpu + destrabar windows",
-      slug: "Optimizar windows y destrabar",
+      title: "Programa A",
+      slug: "programa-a",
       bgColor: "#fff7ee",
-      text: "Software para optimizar windows con función extra de optimizar Gpu Y Cpu",
+      text: "Descripción del Programa A. Aquí colocas lo que necesites.",
       image: "assets/images/prog1.jpg",
-      download: "https://github.com/Resecitud1997/Optimizador-y-destrabar-windows/tree/main/software/releases/latest/download/Optimizador%20y%20destrabar%20Windows.exe"
+      download: "https://example.com/programa-a.zip"
     },
-/example.com/programa-b.zip"
+    {
+      id: "prog-2",
+      title: "Programa B",
+      slug: "programa-b",
+      bgColor: "#eef9ff",
+      text: "Descripción del Programa B. Cambia color, texto, imagen y enlace aquí.",
+      image: "assets/images/prog2.jpg",
+      download: "https://example.com/programa-b.zip"
     }
   ]
 };
