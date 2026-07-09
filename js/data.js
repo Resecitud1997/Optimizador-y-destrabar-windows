@@ -39,3 +39,9 @@ const SITE = {
     },
   ]
 };
+
+// Exporta SITE para entornos de pruebas (Node/Jest). En el navegador esta
+// guarda no tiene efecto porque `module` no existe.
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = SITE;
+}
