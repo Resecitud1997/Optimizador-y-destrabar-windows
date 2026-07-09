@@ -1,5 +1,6 @@
 // Lógica para renderizado y navegación simple
 (function(){
+  const { el, createCard, createGallery, createMenuItem } = window.DOM;
   const app = document.getElementById('app');
   const menuList = document.getElementById('menu-list');
   const menuToggle = document.getElementById('menu-toggle');
@@ -10,18 +11,13 @@
     // Inicio
     addMenuItem({text: 'Inicio', action: () => navigateTo('inicio')});
     // Programas (con submenu)
-    const programasLi = document.createElement('li');
-    programasLi.textContent = 'Programas ▾';
-    const submenu = document.createElement('ul');
-    submenu.className = 'submenu';
+    const programasLi = el('li', { text: 'Programas ▾' });
+    const submenu = el('ul', { className: 'submenu' });
     SITE.programs.forEach(p=>{
-      const li = document.createElement('li');
-      li.textContent = p.title;
-      li.addEventListener('click', () => {
+      submenu.appendChild(createMenuItem(p.title, () => {
         navigateToProgram(p.slug);
         hideMenu();
-      });
-      submenu.appendChild(li);
+      }));
     });
     programasLi.appendChild(submenu);
     menuList.appendChild(programasLi);
@@ -31,10 +27,7 @@
   }
 
   function addMenuItem({text, action}){
-    const li = document.createElement('li');
-    li.textContent = text;
-    li.addEventListener('click', ()=>{ action(); hideMenu(); });
-    menuList.appendChild(li);
+    menuList.appendChild(createMenuItem(text, ()=>{ action(); hideMenu(); }));
   }
 
   menuToggle.addEventListener('click', ()=>{
@@ -68,81 +61,54 @@
 
   function renderHome(page){
     app.innerHTML = '';
-    const hero = document.createElement('section');
-    hero.className = 'card hero';
-    const left = document.createElement('div');
-    left.className = 'left';
-    const h1 = document.createElement('h1');
-    h1.textContent = SITE.title;
-    const p = document.createElement('p');
-    p.textContent = SITE.tagline;
-    left.appendChild(h1);
-    left.appendChild(p);
+    const hero = createCard({ className: 'hero' });
+    const left = el('div', { className: 'left' });
+    left.appendChild(el('h1', { text: SITE.title }));
+    left.appendChild(el('p', { text: SITE.tagline }));
     hero.appendChild(left);
     app.appendChild(hero);
 
     page.content.forEach(block=>{
       if(block.type === 'text'){
-        const sec = document.createElement('section');
-        sec.className = 'card';
-        sec.innerHTML = `<h3 class="section-title">Texto</h3><p>${block.text}</p>`;
-        app.appendChild(sec);
+        app.appendChild(createCard({ html: `<h3 class="section-title">Texto</h3><p>${block.text}</p>` }));
       } else if(block.type === 'gallery'){
-        const sec = document.createElement('section');
-        sec.className = 'card';
-        sec.innerHTML = `<h3 class="section-title">Galería</h3>`;
-        const g = document.createElement('div'); g.className='gallery';
-        block.images.forEach(src=>{
-          const img = document.createElement('img'); img.src=src; img.alt='';
-          g.appendChild(img);
-        });
-        sec.appendChild(g);
+        const sec = createCard({ html: `<h3 class="section-title">Galería</h3>` });
+        sec.appendChild(createGallery(block.images));
         app.appendChild(sec);
       } else if(block.type === 'hero'){
-        const sec = document.createElement('section');
-        sec.className = 'card';
-        sec.innerHTML = `<h2>${block.title}</h2><p>${block.text}</p>`;
-        app.appendChild(sec);
+        app.appendChild(createCard({ html: `<h2>${block.title}</h2><p>${block.text}</p>` }));
       }
     });
   }
 
   function renderDetails(page){
     app.innerHTML = '';
-    const sec = document.createElement('section');
-    sec.className = 'card';
-    sec.innerHTML = `<h2 class="section-title">Detalles</h2><p>${page.content.text}</p>`;
+    const sec = createCard({ html: `<h2 class="section-title">Detalles</h2><p>${page.content.text}</p>` });
     if(page.content.images && page.content.images.length){
-      const g = document.createElement('div'); g.className='gallery';
-      page.content.images.forEach(src=>{
-        const img = document.createElement('img'); img.src=src; img.alt='';
-        g.appendChild(img);
-      });
-      sec.appendChild(g);
+      sec.appendChild(createGallery(page.content.images));
     }
     app.appendChild(sec);
   }
 
   function renderProgram(p){
     app.innerHTML = '';
-    const wrapper = document.createElement('section');
-    wrapper.style.background = p.bgColor || 'transparent';
-    wrapper.style.padding = '18px';
-    wrapper.style.borderRadius = '12px';
-    wrapper.className = 'card';
-    const grid = document.createElement('div');
-    grid.className = 'grid';
-    const left = document.createElement('div');
-    left.innerHTML = `<h2 class="section-title">${p.title}</h2>
+    const wrapper = createCard({
+      styles: {
+        background: p.bgColor || 'transparent',
+        padding: '18px',
+        borderRadius: '12px'
+      }
+    });
+    const grid = el('div', { className: 'grid' });
+    const left = el('div', { html: `<h2 class="section-title">${p.title}</h2>
                       <div class="program">
                         <img src="${p.image}" alt="${p.title}" />
                         <div class="info">
                           <p>${p.text}</p>
                           <a class="download-btn" href="${p.download}" target="_blank" rel="noopener">Descargar</a>
                         </div>
-                      </div>`;
-    const right = document.createElement('div');
-    right.innerHTML = `<div class="card"><strong>Enlaces</strong><p class="footer-note">En el archivo js/data.js puedes editar el color de fondo, texto, imagen y enlace de descarga.</p></div>`;
+                      </div>` });
+    const right = el('div', { html: `<div class="card"><strong>Enlaces</strong><p class="footer-note">En el archivo js/data.js puedes editar el color de fondo, texto, imagen y enlace de descarga.</p></div>` });
     grid.appendChild(left);
     grid.appendChild(right);
     wrapper.appendChild(grid);
