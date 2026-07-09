@@ -1,6 +1,17 @@
 // Lógica para renderizado y navegación simple
 (function(){
   const app = document.getElementById('app');
+
+  // Solo permite URLs http(s) o relativas. Bloquea esquemas peligrosos
+  // como javascript: o data: que permitirían ejecutar código.
+  function safeUrl(url){
+    if(typeof url !== 'string') return '';
+    const trimmed = url.trim();
+    if(/^(https?:|mailto:|\/|\.|#|[^:]*$)/i.test(trimmed) && !/^\s*javascript:/i.test(trimmed)){
+      return trimmed;
+    }
+    return '';
+  }
   const menuList = document.getElementById('menu-list');
   const menuToggle = document.getElementById('menu-toggle');
   const menu = document.getElementById('menu');
@@ -85,15 +96,18 @@
       if(block.type === 'text'){
         const sec = document.createElement('section');
         sec.className = 'card';
-        sec.innerHTML = `<h3 class="section-title">Texto</h3><p>${block.text}</p>`;
+        const h3 = document.createElement('h3'); h3.className = 'section-title'; h3.textContent = 'Texto';
+        const p = document.createElement('p'); p.textContent = block.text;
+        sec.appendChild(h3); sec.appendChild(p);
         app.appendChild(sec);
       } else if(block.type === 'gallery'){
         const sec = document.createElement('section');
         sec.className = 'card';
-        sec.innerHTML = `<h3 class="section-title">Galería</h3>`;
+        const h3 = document.createElement('h3'); h3.className = 'section-title'; h3.textContent = 'Galería';
+        sec.appendChild(h3);
         const g = document.createElement('div'); g.className='gallery';
         block.images.forEach(src=>{
-          const img = document.createElement('img'); img.src=src; img.alt='';
+          const img = document.createElement('img'); img.src=safeUrl(src); img.alt='';
           g.appendChild(img);
         });
         sec.appendChild(g);
@@ -101,7 +115,9 @@
       } else if(block.type === 'hero'){
         const sec = document.createElement('section');
         sec.className = 'card';
-        sec.innerHTML = `<h2>${block.title}</h2><p>${block.text}</p>`;
+        const h2 = document.createElement('h2'); h2.textContent = block.title;
+        const p = document.createElement('p'); p.textContent = block.text;
+        sec.appendChild(h2); sec.appendChild(p);
         app.appendChild(sec);
       }
     });
@@ -111,11 +127,13 @@
     app.innerHTML = '';
     const sec = document.createElement('section');
     sec.className = 'card';
-    sec.innerHTML = `<h2 class="section-title">Detalles</h2><p>${page.content.text}</p>`;
+    const h2 = document.createElement('h2'); h2.className = 'section-title'; h2.textContent = 'Detalles';
+    const p = document.createElement('p'); p.textContent = page.content.text;
+    sec.appendChild(h2); sec.appendChild(p);
     if(page.content.images && page.content.images.length){
       const g = document.createElement('div'); g.className='gallery';
       page.content.images.forEach(src=>{
-        const img = document.createElement('img'); img.src=src; img.alt='';
+        const img = document.createElement('img'); img.src=safeUrl(src); img.alt='';
         g.appendChild(img);
       });
       sec.appendChild(g);
@@ -133,16 +151,27 @@
     const grid = document.createElement('div');
     grid.className = 'grid';
     const left = document.createElement('div');
-    left.innerHTML = `<h2 class="section-title">${p.title}</h2>
-                      <div class="program">
-                        <img src="${p.image}" alt="${p.title}" />
-                        <div class="info">
-                          <p>${p.text}</p>
-                          <a class="download-btn" href="${p.download}" target="_blank" rel="noopener">Descargar</a>
-                        </div>
-                      </div>`;
+    const title = document.createElement('h2'); title.className = 'section-title'; title.textContent = p.title;
+    const program = document.createElement('div'); program.className = 'program';
+    const img = document.createElement('img'); img.src = safeUrl(p.image); img.alt = p.title || '';
+    const info = document.createElement('div'); info.className = 'info';
+    const desc = document.createElement('p'); desc.textContent = p.text;
+    const dl = document.createElement('a');
+    dl.className = 'download-btn';
+    dl.href = safeUrl(p.download) || '#';
+    dl.target = '_blank';
+    dl.rel = 'noopener noreferrer';
+    dl.textContent = 'Descargar';
+    info.appendChild(desc); info.appendChild(dl);
+    program.appendChild(img); program.appendChild(info);
+    left.appendChild(title); left.appendChild(program);
     const right = document.createElement('div');
-    right.innerHTML = `<div class="card"><strong>Enlaces</strong><p class="footer-note">En el archivo js/data.js puedes editar el color de fondo, texto, imagen y enlace de descarga.</p></div>`;
+    const rightCard = document.createElement('div'); rightCard.className = 'card';
+    const strong = document.createElement('strong'); strong.textContent = 'Enlaces';
+    const note = document.createElement('p'); note.className = 'footer-note';
+    note.textContent = 'En el archivo js/data.js puedes editar el color de fondo, texto, imagen y enlace de descarga.';
+    rightCard.appendChild(strong); rightCard.appendChild(note);
+    right.appendChild(rightCard);
     grid.appendChild(left);
     grid.appendChild(right);
     wrapper.appendChild(grid);
